@@ -25,8 +25,8 @@
 # in the templates via {{ site.myvariable }}.
 
 title: 악어새62
-email:jh10253267@gmail.com
-author: GitHub User
+email: jh10253267@gmail.com
+author: 악어새62
 
 # Copyright setting
 # You can use any html code, currently below placeholders are available:
@@ -160,11 +160,11 @@ yat:
 #   - about.md
 
 # Page default value
-# defaults:
-#   home:
-#     heading: "Your awesome heading"
-#     subheading: "Your awesome subheading"
-#     banner: "Your image url"
+defaults:
+  home:
+    heading: "성장하는 개발자"
+    subheading: "반가워요~"
+    banner: "Your image url"
 
 # Banner default settings
 # These banner settings are for global banner default, but you can also
@@ -219,12 +219,12 @@ yat:
 #   shortname: "Your Disqus username"
 
 # Gitment comments
-# gitment:
-#   username: "Your GitHub username"
-#   repo: "The repo to store comments"
-#   client_id: "Your client ID"
-#   client_secret: "Your client secret"
-#   redirect_uri: "Your redirect url"   # If you use a custom domain name
+gitment:
+  username: "jh10253267"
+  repo: "The repo to store comments"
+  client_id: "Your client ID"
+  client_secret: "Your client secret"
+  redirect_uri: "Your redirect url"   # If you use a custom domain name
 
 # Utterances comments
 # See https://utteranc.es/
