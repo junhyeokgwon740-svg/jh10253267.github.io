@@ -221,10 +221,10 @@ defaults:
 # Gitment comments
 gitment:
   username: "jh10253267"
-  repo: "The repo to store comments"
-  client_id: "Your client ID"
-  client_secret: "Your client secret"
-  redirect_uri: "Your redirect url"   # If you use a custom domain name
+  repo: "jh10253267.github.io"
+  client_id: "Ov23liIuPME2Yd3ZURei"
+  client_secret: "13977bdc735e691bd4f882a5f37098598c7257c5"
+  redirect_uri: "https://jh10253267.github.io/"   # If you use a custom domain name
 
 # Utterances comments
 # See https://utteranc.es/
