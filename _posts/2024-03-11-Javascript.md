@@ -4,6 +4,7 @@ title:  "Javascript"
 author: 악어새62
 categories: [ TIL, WEB, Frontend ]
 image: assets/images/5.jpg
+tags: [Javascript, Frontend, Web]
 ---
 # Javascript
 
