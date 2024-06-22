@@ -251,7 +251,6 @@ html {
   -ms-flex: none; /* <-- Fix IE footer issue */
   padding: $spacing-unit * 2 0;
   padding-top: 72px;
-  word-break: keep-all
 }
 
 .page-heading {
@@ -440,7 +439,7 @@ html {
     margin-bottom: $spacing-unit;
     overflow-wrap: normal;
     word-wrap: normal;
-    word-break: normal;
+    word-break: keep-all;
 
     h2 {
       @include relative-font-size(2);
