@@ -27,7 +27,7 @@ tags: [Spring, Security]
 select * from user where id = 입력받은 아이디 and pw = 입력받은 비밀번호;
 ```
 이렇게 로그인이 성공하면 정보를 세션에 담아 쿠키를 발행한다.  
-로그인이 필요한 경로에서 쿠키를 받아 세션을 불러오고 세션이 존재하는지 체크한다. 만약 없다면 로그인 페이지로 리다이렉션 시킨다. 검증이 필요한 경로에서 매번 로직을 작성하니 중복된 코드를 개발자가 기계적으로 작성해야한다.
+로그인이 필요한 경로에서 요청과 함께 전송된 세션 쿠키를 받아 세션을 불러오고 세션이 존재하는지 체크한다. 만약 없다면 로그인 페이지로 리다이렉션 시킨다. 검증이 필요한 경로에서 매번 로직을 작성하니 중복된 코드를 개발자가 기계적으로 작성해야한다.
 
 이를 해결하기 위해 필터를 활용한다.  
 특정한 경로에 접근할 때 필터가 동작하도록 해서 동일한 로직을 필터로 분리시킨다.
@@ -95,17 +95,17 @@ public class loginCheckFilter() implements Filter{
 ## 스프링 시큐리티 필터 체인
 
 ![필터 체인](https://github.com/jh10253267/TIL/assets/108499717/3ec08e0c-a091-46eb-9869-11f719a40e89)
-* SecurityContextPersistenceFilter : SecurityContextRepository에서 SecurityContext를 가져오거나 저장한다.
-* LogoutFilter : 로그아웃 요청을 감시하고 해당 유저를 로그아웃처리한다.
-* UsernamePasswordAuthenticationFilter : 설정한 경로로 오는 요청을 감시하고 유저 인증처리를 한다. 인증 과정은 다음과 같다. 1. AuthenticationManager를 이용한 인증 실행 2. 인증 성공시 Authentication 객체를 SecurityContext에 저장후 AuthenticationSuccessHandler 실행 3. 인증 실패시 AuthenticationFailureHandler 실행 
-* DefaultLoginPageGeneratingFilte : 인증을 위한 로그인폼 경로를 감시한다.
-* BasicAuthenticationFilter : HTTP 기본 인증 헤더를 감시하여 처리
-* RequestCacheAwareFilter : 로그인 성공후 원래 요청 정보를 재구성하기위해 사용
-* SecurityContextHolderAwareRequestFilter : 필터 체인상의 다음 필터들에게 부가 정보를 제공한다.
-* AnonymousAuthenticationFilter : 이 필터가 호출되는 시점까지 사용자 정보가 인증되지 않으면 인증 토큰에 사용자가 익명 사용자로 나타난다.
-* SessionManagementFilter : 인증된 사용자와 관련된 모든 세션을 추적한다.
-* ExceptionTranslationFilter : 보호된 요청을 처리하는 중에 발생할 수 있는 예외를 위임하거나 전달하는 역할을 한다.
-* FilterSecurityInterceptor : AccessDecisionManager로 권한부여 처리를 위임해 접근 제어결정을 돕는다.
+* `SecurityContextPersistenceFilter` : SecurityContextRepository에서 SecurityContext를 가져오거나 저장한다.
+* `LogoutFilter` : 로그아웃 요청을 감시하고 해당 유저를 로그아웃처리한다.
+* `UsernamePasswordAuthenticationFilter` : 설정한 경로로 오는 요청을 감시하고 유저 인증처리를 한다. 인증 과정은 다음과 같다. 1. AuthenticationManager를 이용한 인증 실행 2. 인증 성공시 Authentication 객체를 SecurityContext에 저장후 AuthenticationSuccessHandler 실행 3. 인증 실패시 AuthenticationFailureHandler 실행 
+* `DefaultLoginPageGeneratingFilter` : 인증을 위한 로그인폼 경로를 감시한다.
+* `BasicAuthenticationFilter` : HTTP 기본 인증 헤더를 감시하여 처리
+* `RequestCacheAwareFilter` : 로그인 성공후 원래 요청 정보를 재구성하기위해 사용
+* `SecurityContextHolderAwareRequestFilter` : 필터 체인상의 다음 필터들에게 부가 정보를 제공한다.
+* `AnonymousAuthenticationFilter` : 이 필터가 호출되는 시점까지 사용자 정보가 인증되지 않으면 인증 토큰에 사용자가 익명 사용자로 나타난다.
+* `SessionManagementFilter` : 인증된 사용자와 관련된 모든 세션을 추적한다.
+* `ExceptionTranslationFilter` : 보호된 요청을 처리하는 중에 발생할 수 있는 예외를 위임하거나 전달하는 역할을 한다.
+* `FilterSecurityInterceptor` : AccessDecisionManager로 권한부여 처리를 위임해 접근 제어결정을 돕는다.
 ![mceclip2](https://github.com/jh10253267/TIL/assets/108499717/aaccd38d-1582-4c8e-b5b3-130de7b2b365)
 실제 로그인을 처리하는 필터는 `UsernamePasswordAuthenticationFilter`이다. 이는 `AbstractAuthenticationProcessionFilter`를 구현한 것이다.  
 (과거에는 `AuthenticationFilter`를 사용했다고 한다.)
@@ -168,8 +168,17 @@ public WebSecurityCustomizer webSecurityCustomizer() {
 ```
 
 ## 인증과 인가
+
 인증 : 스스로를 증명하다라는 뜻이며 로그인의 개념이다.
 인가 : 허가나 권한이라는 개념으로 특정한 자원에 접근할 수 있는 권한이 있는지를 확인하는 개념이다.
+
+놀이공원을 생각해보면 이해하기 쉽다.  
+놀이공원에 들어가기 위해서는 일단 티켓이 필요하다. 그러나 티켓이 있다고 해서 모든 시설을 이용할 수는 없다.
+
+동물원을 이용할 계획이라면 돈을 지불하고 동물원 티켓을 사야하고 탈 수 있는 놀이기구도 티켓의 등급에 따라서 다르다.
+
+인증은 놀이공원 입장 티켓이다. 인가는 내가 접근하려는 리소스를 소지한 티켓으로 이용할 수 있는지 확인하는 작업이다.
+
  스프링 시큐리티에서 로그인에 해당하는 인증 단계는 다음과 같은 과정을 거친다.
  1. 사용자 아이디만으로 사용자의 정보를 로딩한다.
  2. 로딩된 사용자의 정보를 이용해서 패스워드를 검증한다.
@@ -189,7 +198,6 @@ public WebSecurityCustomizer webSecurityCustomizer() {
  스프링 시큐리티의 api에는 `userDetails`라는 인터페이스를 구현한 User라는 클래스를 제공하고 빌더방식을 지원하므로 앞에서 사용한 loadUserByUsername()에 약간의 코드를 추가해줄 수 있다.
 
  * `PasswordEncoder`
-
     스프링 시큐리티는 기본적으로 PasswordEncoder를 필요로 한다. 이는 인터페이스로 제공되는데 이를 구현하거나 스프링 시큐리티 api에서 제공하는 클래스를 지정할 수 있다. 해당 타입의 클래스중 BCryptPasswordEncoder는 해시 알고리즘으로 암호화 처리되는데 같은 문자열이라도 매번 해시 처리된 결과가 다르다는 특징이 있다.
  
  로그인 기능이 제대로 동작하려면 Config파일에 PasswordEncoder를 Bean으로 등록하고 이를 주입해줘야한다. 
@@ -212,9 +220,8 @@ public WebSecurityCustomizer webSecurityCustomizer() {
 머나먼 과거의 서블릿을 사용하여 백엔드에서 html파일을 보관하여 서비스하던 때와 비교하면 많이 달라졌다.  
 이러한 이유로 HttpSession이나 쿠키를 사용한 인증방식에 제한이 생긴다. 이를 해결하는 방법은 여러가지가 있다.
 
-* API서버를 호출하는 프로그램의 IP를 서버에 저장해두고 요청이 들어왔을 때 호출한 IP와 서버에 저장된 IP를 비교하여 허용된 IP에 대해서만 서버에서 결과를 만들어주는 방식. IP와 더불어 정해진 키 값을 이용하는 것이 일반적이라고 한다.
-* 토큰을 이용하는 방식 :  
-인증에 성공하면 토큰을 발급해준다. API를 호출할 때 토큰을 같이 전달해 API서버에서 토큰을 확인하고 결과를 만들어주는 방식이다. 이러한 토큰을 Access Token이라고 부른다.
+* API서버를 호출하는 프로그램의 IP를 서버에 저장해두고 요청이 들어왔을 때 호출한 IP와 서버에 저장된 IP를 비교하여 허용된 IP에 대해서만 서버에서 결과를 만들어주는 방식. IP와 더불어 정해진 키 값을 이용하는 것이 일반적이라고 한다. 
+* 토큰을 이용하는 방식은 인증에 성공하면 토큰을 발급해준다. API를 호출할 때 토큰을 같이 전달해 API서버에서 토큰을 확인하고 결과를 만들어주는 방식이다. 이러한 토큰을 Access Token이라고 부른다.
 
 ### 스프링 시큐리티 + JWT를 사용하는 방법
 
@@ -222,14 +229,15 @@ public WebSecurityCustomizer webSecurityCustomizer() {
 
  * 컨트롤러단에서 로그인을 하고 서비스단에서 토큰을 발급해주는 방법
  * 필터를 사용해 로그인을 하는 방법.(스프링 시큐리티를 활용한 방법)
+개인적으론 필터를 통한 로그인 방식을 선호한다. 스프링 시큐리티를 사용하며 이미 구현되어있는 프레임워크의 기능을 이용하는 것이 효율적이라는 생각이 들고 비즈니스 로직과 분리하여 비즈니스 로직에만 집중할 수 있도록 하기 위해서다.
 
 위에서 살펴봤듯이 스프링 시큐리티에선 이미 로그인을 처리하는 필터와 방식이 존재한다.  
 `UsernamePasswordAuthenticationFilter`에서 로그인을 처리한다.    
-개인적으론 필터를 통한 로그인 방식을 선호한다. 스프링 시큐리티를 사용하며 이미 구현되어있는 프레임워크의 기능을 이용하는 것이 효율적이라는 생각이 들고 비즈니스 로직과 분리하여 비즈니스 로직에만 집중할 수 있도록 하기 위해서다.
 
-스프링 시큐리티에서도 말하자면 커스텀해서 사용할 수 있는 로그인 필터를 제공한다.  
+스프링 시큐리티에서 말하자면 커스텀해서 사용할 수 있는 로그인 필터를 제공한다.  
 바로 `AbstractAuthenticationProcessingFilter`이다.  
 이를 상속받은 클래스가 바로 `UsernamePasswordAuthenticationFilter`이다.  
+따라서 위의 추상 클래스를 상속받아 JWT에 맞게 구현한다면 얼마든지 커스텀 로그인 필터를 직접 만들 수 있다.  
 `AbstractAuthenticationProcessingFilter`는 `AuthenticationManager`를 필수적으로 설정해줘야한다. 위에서 살펴본 이유이다.
 
 이는 `SecurityConfig` 설정 클래스에서 할 수 있다.  
@@ -257,15 +265,55 @@ AuthenticationManagerBuilder authenticationManagerBuilder =
 
 1번의 로직은 어렵지 않고 인증 정보를 만드는 부분은 UsernamePasswordAuthenticationToken을 만들어서 설정해둔 AuthenticationManager를 사용해 Authentication타입의 객체를 리턴해주면 된다.
 
+```java
+public class APILoginFilter extends AbstractAuthenticationProcessingFilter {
+    public APILoginFilter(String defaultFilterProcessesUrl) {
+        super(defaultFilterProcessesUrl);
+    }
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+        if(request.getMethod().equalsIgnoreCase("GET")) {
+            log.info("GET METHOD NOW ALLOWED");
+            return null;
+        }
+        //사용자로 부터 입력받은 로그인 정보를 파싱
+        Map<String, String> jsonData = parseRequestJSON(request);
+
+        //인증정보를 만들어 다음 필터로 넘겨줌
+        UsernamePasswordAuthenticationToken authenticationToken
+                = new UsernamePasswordAuthenticationToken(
+                        jsonData.get("mid"),
+                        jsonData.get("mpw"));
+
+        return getAuthenticationManager().authenticate(authenticationToken);
+    }
+
+    private Map<String, String> parseRequestJSON(HttpServletRequest request) {
+        try(Reader reader = new InputStreamReader(request.getInputStream())) {
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            return objectMapper.readValue(reader, Map.class);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return null;
+    }
+}
+```
+```java
+//Security Config
+http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
+```
+
 테스트해보면 로그인 처리가 완료되어 루트 경로로 리다이렉션되는 것을 볼 수 있다.  
-로그인이 성공한 뒤 스프링 시큐리티는 디폴트로 / 경로로 리다이렉션을 시켜준다. 이는 AuthenticationSuccessHandler의 역할로 만약 변경하고 싶다면 이 부분을 커스텀해주면 된다.
+로그인이 성공한 뒤 스프링 시큐리티는 디폴트로 / 경로로 리다이렉션을 시켜준다. 이는 `AuthenticationSuccessHandler`의 역할로 만약 변경하고 싶다면 이 부분을 커스텀해주면 된다.
+(여담으로 내가 누군가에게 오버라이드를 쉽게 설명해줄 때 오버라이딩은 커스텀이라고 한다. 일반화되어있는 클래스를 상속받아 기본적인 골격과 기능을 하나하나 직접 구현할 필요없이 내 필요에 맞게 조금씩 수정해서 사용하는 것이다.)
 
-여담으로 내가 누군가에게 오버라이드를 쉽게 설명해줄 때 오버라이딩은 커스텀이라고 한다. 일반화되어있는 클래스를 상속받아 기본적인 골격과 기능을 하나하나 직접 구현할 필요없이 내 필요에 맞게 조금씩 수정해서 사용하는 것이다.
+`AuthenticationSuccessHandler`를 상속받아 커스텀 `LoginSuccessHandler`클래스를 작성해준다. jwt를 아용한 인증/인가 방식을 사용하고 있으니 로그인이 성공한 뒤 Access Token을 발급해주어야한다.
 
-`AuthenticationSuccessHandler`를 상속받아 커스텀 `LoginSuccessHandler`클래스를 작성해준다. jwt를 아용한 인증/인가 방식을 사용하고 있으니 로그인이 성공한 뒤 수행해줘야하는 작업은 Access Token을 발급하는 것이다.
-
-jwt토큰을 생성하고 검증하는 등의 로직은 직접 구현할 필요없이 jjwt라이브러리를 사용하면 된다.  
-개발자가 작성해야할 부분은 어떤 정보들을 claim으로 넣어줄 것인지, 어떤 알고리즘을 사용할지, 어떤 암호화, 복호화 키를 사용할 것인지 정도다.
+jwt토큰을 생성하고 검증하는 등의 로직은 직접 구현할 필요없이 `jjwt`라이브러리를 사용하면 된다.  
+개발자가 작성해야할 부분은 어떤 정보들을 claim으로 넣어줄 것인지, 어떤 알고리즘을 사용할지, 어떤 암호화, 복호화 키를 사용할 것인지 정도가 된다.
 
 지금까지의 과정을 정리해보면 아래와 같다.
 1. 클라이언트가 `/로그인 필터에서 지정해둔 경로` 요청을 보낸다.
@@ -286,3 +334,108 @@ SecurityContextHolder.getContext().setAuthentication(authentication);
 ```
 이렇게 하면 컨트롤러단에서 유저의 인증정보를 받아서 사용할 수 있다.  
 예를 들면 게시글의 작성자만 수정할 수 있게하기 위해 컨트롤러에서 요청한 유저의 정보를 받아서 비즈니스 로직에서 요청자와 작성자를 비교한다던지 ADMIN 권한을 가진 사용자만 접근할 수 있게 한다던지 할 수 있다.
+
+## 레거시 스프링 시큐리티
+
+레거시 프로젝트를 하며 공부했던 내용도 같이 정리해본다.  
+기본 인증/인가 시나리오는 스프링 부트와 크게 다르지 않다.
+
+일단 의존성을 설정해야한다. 일반적으로 pom.xml파일에서 의존성을 관리할 때 호환성 문제가 생긴다던지 버전 변경을 해야한다던지 하는 경우가 생길 수 있기 때문에 Spring 버전을 일종의 변수로 지정하여 사용하곤 한다.
+
+```xml
+<properties>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <maven.compiler.target>1.8</maven.compiler.target>
+  <maven.compiler.source>1.8</maven.compiler.source>
+  <junit.version>5.9.1</junit.version>
+  <spring.version>5.2.2.RELEASE</spring.version>
+</properties>
+```
+
+이런 식으로.  
+이렇게 하면 버전을 변경해야할 때에도 간단하게 properties의 한 부분만 변경해주면 모든 스프링 의존성의 버전을 관리할 수 있다.
+
+나는 스프링 5.3점대 버전을 사용하고 있었는데 오류가나서 봤더니 스프링 시큐리티는 내가 사용하던 버전이 없었다. 그래서 버전을 스프링 시큐리티에 맞춰서 적용했다.
+
+앞의 부분들은 이전 Web 03포스팅에서 찾아볼 수 있다.
+
+스프링 시큐리티를 사용하려면 `AbstractSecurityWebApplicationInitializer`를 상속받는 클래스를 작성해주어야한다. 이렇게 하면 스프링 시큐리티가 제공하는 필터들을 사용할 수 있게 활성화 시켜준다.
+
+다음으로는 어떤 경로들에 대해 인증을 거치도록 할 것인지 그리고 암호를 처리할 때 어떤 알고리즘을 사용할 것인지등을 설정해줘야한다.
+
+`WebSecurityConfigurerAdapter`클래스를 상속받은 시큐리티 컨피그 클래스를 작성하고 여기서 설정해준다.
+
+이렇게 생성한 클래스에 `@EnableWebSecurity` 애노테이션을 붙여서 스프링 시큐리티의 기본적인 빈이 자동으로 구성될 수 있도록한다.
+
+주된 설정 부분은 다음과 같다.
+```java
+// 인증 인가 처리를 거치지 않도록 설정.
+// 예를 들어 favicon.ico나 css와 같은 정적 파일들에 대해서는 인증을 거치지 않아도 되기 때문에 이 부분을 적어준다.
+@Override
+public void configure(WebSecurity web) {
+  web.ignoring().antMatchers("경로1", "경로2");
+}
+
+// 우리가 웹 서비스를 이용할 때 로그인하지 않아도 볼 수 있는 페이지가 있고 아닌 페이지가 있다. 여기서 설정해주면 된다. 아래의 코드는 루트 경로와 /main경로에 대해 허가하고있고 그 외의 경로들에 대해서는 인증을 거치도록 설정하고 있다.
+//
+@Override
+protected void configure(HttpSecurity http) {
+  http
+    .csrf().disable()
+    .authorizeRequests()
+    .antMatchers("/", "/main").permitAll()
+    .anyRequest().authenticated();
+}
+
+@Override
+protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(customUserDetailsService);
+}
+
+@Bean
+public PasswordEncoder encoder() {
+  return new BCryptPasswordEncoder();
+}
+```
+```java
+@Override
+protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(customUserDetailsService);
+}
+```
+이 부분은 인증 인가 처리를 UserDetailsService를 구현한 구현체로 로그인 처리를 하도록 설정하는 부분이다.
+
+http.으로 시작하는 메소드 체이닝 설정에서 로그인 정보가 넘어오는 경로가 어떤 경로인지, 프론트에서 어떤 이름으로 아이디와 비밀번호가 넘어오는지 등을 설정한다.
+
+그리고 로그인 처리를 어떤 url에서 할 것인지, 로그인이 성공한 다음 어떤 경로로 리다이렉트시킬지, 로그인에 실패했을 때 어떤 페이지를 보여줄 것인지등을 설정할 수 있다.
+
+```java
+.and()
+  .formLogin()
+  .loginPage("/members/loginform")
+  // 프론트의 input태그의 name속성을 적어준다.
+  .usernameParameter("loginEmail")
+  .passwordParameter("password")
+  // form의 전송 경로를 아래에 적어준다.
+  .loginProcessingUrl("/authenticate")
+  .failureForwardUrl("/members/loginerror?login_error=1")
+  .defaultSuccessUrl("/", true)
+  .permitAll()
+.and()
+  .logout()
+  .logoutUrl("/logout")
+  .logoutSuccessUrl("/");
+```
+
+이렇게 설정하면 AuthenticationFilter에서 아이디와 암호를 입력받아 로그인을 처리하게된다.
+
+logoutUrl을 설정해주면 여기 명시된 경로로 요청이 오면 스프링 시큐리티에서는 세션에서 로그인 정보를 삭제하여 로그아웃처리한다.
+
+위에서 살펴보았듯이 로그인을 처리하는 필터는 AuthenticationFilter로 내부에서 UserDetailsService 타입의 클래스를 사용한다.
+
+로그인 처리를 하려면 데이터베이스에서 해당하는 유저의 정보를 가져와서 사용해야한다.  
+이 부분을 구현할 때 주의해야하는 점은 시큐리티와 데이터베이스는 별개의 계층이기 때문에 구조적으로 분리되어야한다는 것이다.
+
+유저의 정보를 불러오기 위한 유저 서비스 클래스를 작성하고 내부에서 dao를 통해 유저의 정보와 권한을 불러온다.
+
+UserDetailsService의 `loadUserByUsername`메소드는 UserDetails타입을 리턴하고 필터에서 적절한 인증 정보가 넘어오면 로그인처리하는 식이다.
