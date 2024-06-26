@@ -86,7 +86,7 @@ translate_langs: []
 # spacegrey: #353535
 # snowwhite: #ffffff
 #
-# theme_color: snowwhite
+theme_color: spacegrey
 #
 # Custom color as below:
 # theme_color: "#882250"
