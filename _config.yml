@@ -144,6 +144,8 @@ defaults:
     subheading: "반가워요~"
     banner: "Your image url"
 
+timezone: Asia/Seoul
+
 # Banner default settings
 # These banner settings are for global banner default, but you can also
 # config it by the front matter for one specific post
