@@ -1,10 +1,10 @@
 ---
 layout: post
 title:  "API Versioning"
-author: sal
+author: 악어새62
 categories: [ TIL, WEB, Backend ]
 image: assets/images/3.jpg
-tags: [Web, API]
+tags: [ Web, API ]
 ---
 ## 개요
 
