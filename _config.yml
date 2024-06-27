@@ -85,9 +85,9 @@ translate_langs: []
 # coolblack: #090a0b
 # spacegrey: #353535
 # snowwhite: #ffffff
-#
+
 theme_color: spacegrey
-#
+
 # Custom color as below:
 # theme_color: "#882250"
 
@@ -130,12 +130,13 @@ night_mode: "menual"
 
 # If you want to link only specific pages in your header, uncomment
 # this and add the path to the pages in order as they should show up
-# header_pages:
-#   - index.html
-#   - archives.html
-#   - categories.html
-#   - tags.html
-#   - about.md
+header_pages:
+  - index.html
+  - archives.html
+  - categories.html
+  - tags.html
+  - about.md
+  - search.html
 
 # Page default value
 defaults:
