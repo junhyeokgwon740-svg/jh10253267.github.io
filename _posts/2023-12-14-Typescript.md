@@ -2,7 +2,7 @@
 layout: post
 title:  "Typescript"
 author: 악어새62
-categories: [TIL, Web, Frontend ]
+categories: [TIL, WEB, Frontend ]
 tags: [ "Typescript"]
 image: assets/images/5.jpg
 ---
