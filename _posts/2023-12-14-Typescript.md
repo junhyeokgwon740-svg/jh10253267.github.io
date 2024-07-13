@@ -566,7 +566,7 @@ if(h1El instanceof HTMLHeadingElement) {
 }
 ```
 
-### 인터페이스
+## 인터페이스
 
 인터페이스는 자바와 비슷하게 어떤 약속을 의미한다.  
 따라서 name부분에 String타입이 아닌 데이터를 넣거나 속성으로 명시되어있는 값을 지정해주지 않으면 에러가 발생한다.
@@ -612,3 +612,89 @@ const son: User = {
 son.getName('Hello~~');
 //Hello~~
 ```
+
+```typescript
+interface Fruits {
+  [item: number]: string
+}
+```
+
+### 인덱스 가능 타입
+
+대표적인 인덱스를 사용할 수 있는 자료구조는 배열과 객체가 있다.
+```typescript
+interface Fruits {
+  [item: number]: string
+}
+
+const fruits: Fruits = ['Apple', 'Banana', 'Cherry']
+console.log(fruits[0])
+```
+이런 사용 방식을 인덱스 시그니처라고한다.  
+```typescript
+interface Payload {
+  [key: string]: unknown
+}
+interface Users {
+  [key: string]: unknown
+  name: string
+  age: number
+}
+function logValues(payload: Payload) {
+  for (const key in payload) {
+    console.log(payload[key]);
+  }
+}
+
+const son: User = {
+  name: 'Son',
+  age: 31,
+  isValid: true
+}
+logValues(son)
+```
+유저 인터페이스와 페이로드 인터페이스를 작성했다.
+이렇게 작성해보면 오류가난다. User인터페이스의 인덱스 시그니쳐 유형이 없다는 것인데 User인터페이스가 `logValues(son)`에서도 사용될 수 있으려면 User 인터페이스도 인덱스 시그니처 형식으로 만들어줘야한다.
+
+즉, 같은 객체 데이터라도 인덱스 가능한 타입인지 아닌지가 달라진다.
+
+### 상속
+
+자바스크립트 클래스를 사용할 때 extends키워드를 이용해서 상속하여 클래스를 확장해서 사용할 수 있었다. 타입스크립트의 인터페이스도 상속을 사용할 수 있다.
+
+```js
+interface UserA {
+  name: string
+  age: number
+}
+interface UserB  extends UserA {
+  isValid: boolean
+}
+
+const son: UserA {
+  name: 'son',
+  age: 31
+  isValid: true // error
+}
+const park: UserB {
+  name: 'Park',
+  age: 43,
+  isValid: true
+}
+```
+UserB에는 isValid속성이 있어서 park은 에러가 나지 않지만 son은 UserA를 사용하고 있기때문에 에러가 난다.
+
+```typescript
+interface FullName {
+  firstName: string
+  lastName: string
+}
+interface FullName {
+  middleName: string
+  lastName: boolean
+}
+```
+이처럼 사용하는 것도 가능하다.  
+중복되는 인터페이스를 작성하고 그 안에 다른 필드를 추가할 수 있다.
+
+그러나 lastName에서 에러가 생기는데 위의 인터페이스에선 lastName을 string으로 설정했는데 아래에선 lastName을 boolean타입으로 설정했기 때문에 같은 이름으로 속성을 사용할 때에는 같은 타입으로 선언해주어야한다.
