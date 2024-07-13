@@ -8,9 +8,9 @@ image: assets/images/5.jpg
 ---
 ## 개요
 
-세상에는 여러가지 프로그래밍 언어가 있다. 그 언어마다의 용도와 특성이 모두 다른데 여러가지 언어를 경험해 봤다면 자유로운 형식의 언어와 엄격한 형식의 언어로 나눠볼 수 있을것이다.
+세상에는 여러가지 프로그래밍 언어가 있다. 그 언어마다의 용도와 특성이 모두 다른데 여러가지 언어를 경험해 봤다면 자유로운 형식의 언어와 엄격한 형식의 언어로 나눠볼 수 있을 것이다.
 
-예를 들어 c언어를 사용할 때 6줄의 코드를 작성해서 콘솔창에 Hello World를 출력했고 파이썬을 사용할 땐 한줄의 코드만 작성하면 된다.
+예를 들어 c언어를 사용할 땐 변수의 타입을 지정해주고 간단한 문자열을 출력하기 위해선 6줄의 코드를 적어야했고 파이썬을 사용할 땐 변수의 타입을 지정하지 않고 문자열 출력도 한줄의 코드만 작성하면 된다.
 
 자바스크립트는 비교적 자유로운 형식의 언어에 속한다.
 
@@ -24,20 +24,18 @@ function sum(num1, num2) {
   return num1 + num2;
 }
 ```
-
 ```javascript
 sum(10, 20); // 30
 sum('10', '20'); //1020
 ```
-우리가 원하는 결과는 첫번째 결과처럼 숫자 두 개를 더하는 것이였는데 문자열 두개를 이어버리는 연산이 수행되어버렸다.
-
+우리가 원하는 결과는 첫 번째 결과처럼 숫자 두 개를 더하는 것이였는데 문자열 두개를 이어버리는 연산이 수행되어버렸다.  
 이렇게 타입이 정수형이 아닌 문자형을 입력해도 오류를 발생시키지 않고 작동한다.
 
-의도치 않은 입력값이 들어갔고 그로인해 의도치 않은 동작이 수행된다.
-
+의도치 않은 입력값이 들어갔고 그로인해 의도치 않은 동작이 수행된다.  
 타입스크립트를 사용하면 이러한 오류를 사전에 방지할 수 있다.
 
 ## 정적 타입의 컴파일 언어
+
 * 자바스크립트(동적 타입) - 런타임에서 동작할 때 타입오류를 확인한다.
 * 타입스크립트(정적 타입) - 코드 작성단계에서 타입오류 확인
   자바스크립트로 변환(컴파일)후 브라우저나 Node.js환경에서 동작한다.
@@ -698,3 +696,304 @@ interface FullName {
 중복되는 인터페이스를 작성하고 그 안에 다른 필드를 추가할 수 있다.
 
 그러나 lastName에서 에러가 생기는데 위의 인터페이스에선 lastName을 string으로 설정했는데 아래에선 lastName을 boolean타입으로 설정했기 때문에 같은 이름으로 속성을 사용할 때에는 같은 타입으로 선언해주어야한다.
+
+## 타입 별칭
+
+타입 별칭이란 타입스크립트에서 사용하는 타입을 직접 정의할 수 있는 기능을 말한다.
+```typescript
+type TypeA = string
+type TypeB = string | number | boolean
+type User = {
+  name: string
+  age: number
+  isValid: boolean
+} | [string, number, boolean]
+
+const userA: User = {
+  name: 'Son'
+  age: 31
+  isValid: true
+}
+const userB: User = ['James', 31, false]
+
+function doSomething(param: TypeB): TypeA {
+  switch (typeof parma) {
+    case 'string':
+      return param.toUpperCase()
+    case 'number': 
+      return param.toFixed(2)
+    default:
+      return true
+  }
+}
+
+```
+parma이라는 이름으로 TypeB라는 타입을 받고있고 리턴 타입은 TypeA로 위에서 지정한대로 string이다.  
+보통 하나의 타입을 별칭을 지정해서 사용하지 않고 유니온 타입이나 인터섹션타입을 지정해서 재사용할 수 있다.  
+기본 문법은 `type`키워드와 함께 지정하는 식이다.
+
+doSomething함수의 마지막 부분을 보면 불리언 타입을 리턴하고있는데 리턴 타입은 TypeA여야하기 때문에 에러가 생긴다.  
+
+마치 인터페이스와 비슷한 느낌이다.  
+```typescript
+type TypeUser = {
+  name: string
+  age: number
+  isValid: boolean
+}
+
+interface InterfacedUser {
+  name: string
+  age: number
+  isValid: boolean
+}
+
+const son: TypeUser = {
+  name: 'son'
+  age: 31,
+  isValid: true
+}
+const james: InterfacedUser = {
+  name: 'James'
+  age: 32,
+  isValid: true
+}
+```
+기능적으로는 차이가 없지만 여러 개의 타입의 별칭을 지정하는 의미가 있는 것은 타입 별칭으로 인터페이스는 객체 데이터를 전재하기 때문에 그 의미에 좀 더 맞는 것은 인터페이스다.
+
+## 명시적 this
+
+```typescript
+interface Cat {
+  name: string
+  age: number
+}
+const cat: Cat = {
+  name: 'Lucy',
+  age: 3
+}
+
+function hello(message: string)  {
+  console.log(`Hello ${this.name}, ${message}`);
+}
+hello.call(cat, 'You are pretty awesome!')
+```
+call 메소드는 함수나 메소드 어떤 대상에서 실행될지 설정할 수 있다.  
+위의 예에선 cat이라는 객체가 된다. this는 cat을 가리킨다.  
+실행은 되지만 vscode상에서는 빨간줄이 생기게 되는데 메시지는 this에는 형식 주석이 없기 때문에 암시적으로 any형식이 포함된다는 것이다.
+
+타입스크립트는 형식을 엄격히 지키는 것이 목표임으로 any가 사용되는 것은 좋지 못하다. 따라서 이렇게 수정할 수 있다.
+```typescript
+function hello(this: Cat ,message: string)  {
+  console.log(`Hello ${this.name}, ${message}`);
+}
+```
+이 것을 명시적 this라고 한다.
+
+## 오버로딩
+
+```typescript
+function add1(a: string, b: string) {
+  return a + b
+}
+function add2(a: number, b: number) {
+  return a + b
+}
+add1('Hello', 'world')
+add2(2, 3)
+add1(3, 4) // 에러
+add2('simple', 'test') // 에러 
+```
+```typescript
+function add(a: string, b: string): string
+function add(a: number, b: number): number
+function add(a: any, b: any) {
+  return a + b
+}
+add('Hello', 'world')
+add(2, 3)
+```
+위와 같이 함수의 입력 타입을 나누어서 여러개를 정의했고 마지막에는 a + b를 리턴하는데 이 부분은 함수의 기능을 정의하는 부분이다.
+
+## 접근 제어자
+
+자바의 접근 제어자와 같은 개념이다.  
+하나의 클래스에 얼마만큼의 접근 권한을 주느냐를 설정한다.
+```typescript
+class UserA {
+  first: string
+  last: string
+  age: number
+
+  constructor(first: string, last: string, age: number){
+    this.first = first;
+    this.last = last;
+    this.age = age;
+  }
+  getAge() {
+    return `${this.first} ${this.last} is ${this.age}`
+  }
+}
+```
+위의 필드 first, last, age 앞에는 접근제어자가 붙어있지 않다. 이러면 자동으로 public 접근 제어자가 설정된다.  
+public 접근 제어자는 어디서든 해당 필드에 접근할 수 있다는 것을 의미한다.
+`son.first`
+
+다음 접근 제어자는 protected가 있다. 자기 자신과 자식 클래스에서 접근 가능하다.  
+private는 내 클래스에서만 접근이 가능하다.
+
+예를 들어
+```typescript
+class UserA {
+  constructor(
+    public first: string = '',
+    protected last: string = '', 
+    private age: number = 0
+    ) {
+    this.first = first;
+    this.last = last;
+    this.age = age;
+  }
+  protected getAge() {
+    return `${this.first} ${this.last} is ${this.age}`
+  }
+}
+class UserB extends UserA {
+  getAge() {
+    return return `${this.first} ${this.last} is ${this.age}`
+  }
+}
+class UserC extends UserB {
+  getAge() {
+    return return `${this.first} ${this.last} is ${this.age}`
+  }
+}
+
+const son = new UserA('Son', `Heungmin`, 31);
+console.log(son.first)
+console.log(son.last) // 에러
+console.log(son.age) // 에러
+son.getAge() // 에러
+```
+last속성은 보호된 속성이며 UserA와 하위 클래스에서만 엑세스 할 수 있다는 메시지가  나온다.   
+age속성은 private로 선언되었으며 클래스 내부에서만 엑세스할 수 있다는 메시지가 나온다.
+
+## 제너릭
+
+### 함수
+
+```typescript
+interface Obj {
+  x: number
+}
+type Arr = [number, number]
+
+function toArray(a: string, b: string): string[]
+function toArray(a: number, b: number): number[]
+function toArray(a: boolean, b: boolean): boolean[]
+function toArray(a: Obj, b: Obj): Obj[]
+function toArray(a: Arr, b: Arr): Arr[]
+function toArray(a: any, b: any): any[] {
+  return [a, b]
+}
+
+console.log(
+  toArray('Neo', 'Anderson'),
+  toArray(1, 2),
+  toArray(true, false),
+  toArray({x: 1}, {x: 2}),
+  toArray([1, 2], [3, 4])
+)
+```
+이렇게 경우의 수가 많아지면 함수 오버로딩이 길어지는 문제가 생긴다. 이를 해결할 수 있는 방법이 바로 제너릭이다.
+```typescript
+interface Obj {
+  x: number
+}
+type Arr = [number, number]
+
+function toArray<T>(a: T, b: T) {
+  return [a, b]
+}
+
+console.log(
+  toArray('Neo', 'Anderson'),
+  toArray(1, 2),
+  toArray(true, false),
+  toArray({x: 1}, {x: 2}),
+  toArray([1, 2], [3, 4])
+  toArray([1, 2], [3, 4, 5]) // 배열
+)
+```
+toArray를 정의하는 부분에 `<>`기호를 사용하고있고 안에 T라는 문자를 사용하고 있다. 이는 어떤 이름으로 지어도 상관이 없지만 타입이라는 의미로 T로 사용하는 것이 일반적이다.
+여기에는 타입 정보를 담고 있기 때문에 매개변수의 타입으로 사용할 수 있다.  
+예를 들어 `toArray('Neo', 1)`과 같이 작성하면 첫번째 인자로 들어간 `"Neo"`의 영향으로 T의 타입이 결정되게 되고 따라서 두번째 매개변수도 역시 string으로 정해지기 때문에 다른 타입을 넣으면 에러가 발생한다.  
+아니면 함수를 호출할 때 타입을 명시할 수도 있다.  
+`toArray<string>()`과 같이 사용할 수 있다.
+
+위에서 Arr타입을 정의할 때 배열에 두가지 인수를 넣어줬다 그렇기 때문에`toArray([1, 2], [3, 4, 5])`이렇게 작성하면 에러가 날 것 같지만 숫자 배열로 인식되어 정상 동작한다.  
+그러나 두 개의 인수만 가지도록 의도했다면 명시적으로 Arr와 같이 타입을 정의해주어야한다.
+`toArr<Arr>`
+
+### 클래스
+
+이번에는 클래스에서 제너릭 문법을 사용하는 방법으로 다음과 같다.
+```typescript
+class User<P> {
+  constructor(public payload: P) {
+    
+  }
+  getPayload() {
+    return this.payload
+  }
+}
+```
+```typescript
+interface UserAType {
+  name: string
+  age: number
+  isValid: boolean
+}
+interface UserBType {
+  name: string
+  age: number
+  emails: string[]
+}
+
+const son = new User<UserAType> {
+  name: 'son',
+  age: 31,
+  isValid: true
+  emails: [] // 에러
+}
+const park = new User<UserBType> {
+  name: 'park',
+  age: 31,
+  emails: []
+}
+```
+
+### 인터페이스와 제약조건
+
+```typescript
+interface MyData<T> {
+  name: string
+  value: T
+}
+const dataA: MyData<string> = {
+  name: 'Data A',
+  value: 'Hello world'
+}
+const dataB: MyData<number> = {
+  name: 'Data A',
+  value: 1234
+}
+```
+그러나 만약 T를 사용하되 가능한 타입을 제한하고 싶다면 다음과 같이 사용할 수 있다.  
+이를 제약조건이라고 한다.
+```typescript
+interface MyData<T extends string | number> {
+  name: string
+  value: T
+}
+```
