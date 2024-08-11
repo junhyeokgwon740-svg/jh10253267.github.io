@@ -108,6 +108,7 @@ spring:
 
 인텔리제이 기준으로 run/debug configurations설정의 Active profies에서 어떤 profile을 사용할 것인지 설정할 수 있다.
 따로 설정해주지 않으면 비어있는데 위에서 설정한 default설정을 사용하게 된다.
+<img width="729" alt="스크린샷 2024-08-11 시간: 20 22 32" src="https://github.com/user-attachments/assets/2c2a90fb-e900-4aed-b0ec-d7e360dc07ef">
 
 아니면 `java -jar -Dspring.profiles.active=local app.jar`와 같이 명령어를 주어 사용할 수도 있다.
 이를 System Properties라고한다. 실행한 JVM 내부에서 접근 가능한 외부 설정으로 -D옵션을 사용하고 키와 벨류형식으로 입력하면 된다.
