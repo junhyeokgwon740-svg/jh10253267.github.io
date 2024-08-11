@@ -98,6 +98,14 @@ profiles:
 ```
 이 부분은 디폴트로 local profile을 사용하고 local의 경우 local과 common을 그룹지어서 함께 사용, prod의 경우 prod, common을 그룹지어서 함께 사용한다는 의미의 설정이다.
 
+이렇게 사용하는 것도 가능하고 별도의 파일로 분리해서 사용할 수도 있다.
+application-local.yml과 같이 application-{profile}.yml과 같은 형식으로 사용해도 된다. 다른 설정 파일에서 다음과 같이 사용하면 된다.
+```yml
+spring:
+  profiles:
+    active: prod
+```
+
 인텔리제이 기준으로 run/debug configurations설정의 Active profies에서 어떤 profile을 사용할 것인지 설정할 수 있다.
 따로 설정해주지 않으면 비어있는데 위에서 설정한 default설정을 사용하게 된다.
 
