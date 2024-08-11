@@ -92,9 +92,9 @@ profiles:
   activate: local
   group:
     local: 
-      = common
+      - common
     prod:
-      -common
+      - common
 ```
 이 부분은 디폴트로 local profile을 사용하고 local의 경우 local과 common을 그룹지어서 함께 사용, prod의 경우 prod, common을 그룹지어서 함께 사용한다는 의미의 설정이다.
 
