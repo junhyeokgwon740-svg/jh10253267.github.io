@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Javascript Object"
+title:  "Javascript object"
 author: 악어새62
 categories: [TIL, WEB, Frontend ]
 tags: [ Javascript, Web, Frontend]
@@ -63,16 +63,11 @@ let healthObj = {
 
 healthObj.showHealth();
 ```
-이와 같은 형태를 객체 리터럴이라 부른다.
-
-그러나 이러한 형태의 객체가 여러개 필요하다면?
-
-healthObj1,healthObj2 .....
-
-이런 식으로 형태는 같고 디테일한 내용만 다른 객체들을 여러번 선언해줘야할 것이다.
-
-개발자들이 끔찍히도 싫어하는 코드가 중복되는 문제가 생긴다.
-
+이와 같은 형태를 객체 리터럴이라 부른다.  
+그러나 이러한 형태의 객체가 여러개 필요하다면?  
+healthObj1,healthObj2 .....  
+이런 식으로 형태는 같고 디테일한 내용만 다른 객체들을 여러번 선언해줘야할 것이다.  
+개발자들이 끔찍히도 싫어하는 코드가 중복되는 문제가 생긴다.  
 이런 문제를 해결하는 방법은 다른 객체 지향 프로그래밍언어처럼 new 키워드를 이용해 객체를 동적으로 생성하는 방법이다.
 
 ```javascript
@@ -85,17 +80,14 @@ const h = new Health("달리기", "10:12");
 
 h2 = new Health("걷기", "20:11"); 
 ```
-이런 식으로 사용할 수 있다.
-
+이런 식으로 사용할 수 있다.  
 그러나 아직 내부 함수가 새롭게 정의되며 중복되고 있다.
-
-이를 해결할 수 있는 방법이 바로 
+이를 해결할 수 있는 방법이 바로  
 > Prototype
 
 ## Prototype
 
-모든 자바스크립트 객체는 한 곳을 바라본다. 바로 prototype이라는 공간이다.
-
+모든 자바스크립트 객체는 한 곳을 바라본다. 바로 prototype이라는 공간이다.  
 위에서 살펴본 것 같이 새로운 객체를 new 키워드를 이용해 생성하면 생성된 모든 객체는 프로토 타입을 바라본다.
 
 ![프로토타입](https://github.com/jh10253267/TIL/assets/108499717/1e19a9c4-92ee-4704-9d2f-af5c3f430242)
