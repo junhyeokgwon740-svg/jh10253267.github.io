@@ -34,6 +34,10 @@ id 값으로 admin, password값으로 ' OR '1' = '1과 같은 비정상적인 �
 ```sql
 SELECT user FROM user_table WHERE id='user' AND password=' ' OR '1' = '1';
 ```
+SQL의 and는 or보다 우선순위가 높기 때문에 다음과 같이 간주한다.
+```sql
+SELECT user FROM user_table WHERE (id='user' AND password=' ') OR ('1' = '1');
+```
 1. id가 user이고 password가 빈 문자열인 데이터를 찾는다.
 2. '1' = '1' 의 조건을 or로 추가하여 언제나 true를 리턴한다.
 3. 앞의 아이디와 패스워드가 일치하지 않더라도 SQL Injection 공격의 영향으로 결국 권한이 없더라도 모든 데이터를 가져오게 된다.
