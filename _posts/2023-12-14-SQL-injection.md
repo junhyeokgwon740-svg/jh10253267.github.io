@@ -1,3 +1,11 @@
+---
+layout: post
+title:  "SQL Injection"
+author: 악어새62
+categories: [ TIL, Backend ]
+image: assets/images/4.jpg
+tags: [Backend]
+---
 ## 개요
 
 처음엔 SQL Injection을 이해하지 못했다. 인터넷을 돌아다니며 처음 봤던 예제가 이해하기 어려웠던 것 같다. 그래서 이번 기회에 정리해보려한다.
@@ -34,7 +42,7 @@ id 값으로 admin, password값으로 ' OR '1' = '1과 같은 비정상적인 �
 ```sql
 SELECT user FROM user_table WHERE id='user' AND password=' ' OR '1' = '1';
 ```
-SQL의 and는 or보다 우선순위가 높기 때문에 다음과 같이 간주한다.
+SQL의 and는 or보다 우선순위가 높기 때문에 다음과 같이 실행된다.
 ```sql
 SELECT user FROM user_table WHERE (id='user' AND password=' ') OR ('1' = '1');
 ```
@@ -44,18 +52,15 @@ SELECT user FROM user_table WHERE (id='user' AND password=' ') OR ('1' = '1');
 
 ## Statement와 PreparedStatement 
 
-전에 살펴봤던 JDBC에서 SQL Injection을 막기위해 Statement 대신 PreparedStatement를 사용한다고 한적이 있다.
-
+전에 살펴봤던 JDBC에서 SQL Injection을 막기위해 Statement 대신 PreparedStatement를 사용한다고 한적이 있다.  
 ps는 물음표로 바인딩된 값을 스트링으로 처리한다. 즉 좀전에 살펴본 예에서의 악의적인 구문이 sql문으로써 작용하지 않고 단순한 문자열로 작용하기 때문에 SQL Injection에 안전한 것이다.
 
 반면 Statement의 경우
-
 ```sql
 String query = "SELECT * FROM STUDENTS WHERE name = '" + name + "';
 ```
 
-위와 같이 사용된다. 이렇게 되면 악의적인 구문이 그대로 쿼리문이되고 실제로 db에 영향을 미치게된다.
-
+위와 같이 사용된다. 이렇게 되면 악의적인 구문이 그대로 쿼리문이되고 실제로 db에 영향을 미치게된다.  
 위에서 본 만화와 같은 상황에 실제로 일어나게 되는 것이다.
 
 Statement사용을 지양하고 PreparedStatement를 사용해야하는 이유를 좀 더 자세히 알아보자면 이렇다.
