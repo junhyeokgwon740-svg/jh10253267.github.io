@@ -331,5 +331,3 @@ public class CustomFunctionContributor implements FunctionContributor {
 인자는 차례대로 사용할 함수 이름, 쿼리, 리턴 타입으로 함수의 이름은 자바에서 메소드의 이름을 정의하듯이 사용자 지정 이름이다.  
 쿼리는 `match (?1) against (?2 in boolean mode)`와 같이 작성하면 된다.  
 이 쿼리는 리턴 타입이 Double이다.
-
-### 이론
