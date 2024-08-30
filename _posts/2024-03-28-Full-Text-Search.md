@@ -68,7 +68,6 @@ create문으로도 생성이 가능하다.
 ```sql
 CREATE FULLTEXT INDEX 인덱스명 on 테이블명(필드명) WITH PARSER ngram;
 ```
-CREATE FULLTEXT INDEX ft_index on club(title) WITH PARSER ngram;
 
 생성된 인덱스를 확인하려면 다음 명령어를 입력하면 된다.
 ```sql
@@ -81,7 +80,7 @@ drop index 인덱스 이름 on 테이블 명;
 ```
 만약 데이터가 영어로 구성되어있었다면 생성된 인덱스 목록에서 in, or과 같은 단어는 빠져있다. 중지단어이기 때문이다.
 
-중지단어는 디폴트로 생성되어있고 in, or, and같은 단어들이 등록되있다. 만약 커스텀하여 중지단어를 생성하고 싶은 경우 다음의 명령어를 사용하면 된다.
+중지단어는 디폴트로 생성되어있고 in, or, and 같은 단어들이 등록되있다. 만약 커스텀하여 중지단어를 생성하고 싶은 경우 다음의 명령어를 사용하면 된다.
 ```sql
 CREATE TABLE user_stopword (value VARCHAR(30));
 INSERT INTO user_stopword values('그리고'), ('그러나');
