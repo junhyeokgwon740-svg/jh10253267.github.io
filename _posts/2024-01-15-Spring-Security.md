@@ -119,7 +119,7 @@ public class loginCheckFilter() implements Filter{
 
 이들을 통해 유저의 정보를 읽어오고 인증을 처리한다.  
 이중 가장 중요한 요소는 실제로 인증을 처리하는 `UserDetailsService이다`.  
-`UserDetailsService`는 인터페이스로 `loadUesrByUsername`이라는 단 하나의 메소드만 가진다. 인터페이스니 개발자가 구현해서 사용하면 되는데 유저의 정보는 db에 저장되어있고 이는 프로젝트 스펙에 따라 달라지기때문이다.  
+`UserDetailsService`는 인터페이스로 `loadUesrByUsername`이라는 단 하나의 메소드만 가진다. 인터페이스니 개발자가 구현해서 사용하면 되는데 이렇게 설계된 이유는 유저의 정보는 db에 저장되어있고 데이터베이스와 시큐리티는 별개의 관심사기 때문이 아닐까 생각한다.  
 (여기서 username은 스프링 시큐리티에서 사용하는 명칭으로 우리가 흔히 사용하는 아이디를 말한다.)
 
 반환 타입은 `UserDetails`라는 이름의 인터페이스 타입이다.  
@@ -127,7 +127,7 @@ public class loginCheckFilter() implements Filter{
 
 따라서 해당 인터페이스를 직접 구현하여 사용하는 것도 가능하고 이렇게 만들어진 클래스는 UserDetails 타입을 필요로하는 부분에 끼워 넣을 수 있다.
 
-주로 User클래스를 사용하곤 하는데 이는 `UserDetails`의 구현체로 스프링 시큐리티에서 제공하고있다. 빌더타입을 지원하고 username, password, authorities를 넣어 생성하면 된다.
+나는 주로 User클래스를 사용하곤 하는데 이는 `UserDetails`의 구현체로 스프링 시큐리티에서 제공하고있다. 빌더타입을 지원하고 username, password, authorities를 넣어 생성하면 된다. 아니면 직접 UserDetails를 구현하여 UserDetailsImpl와 같이 사용해도 상관없다.
 
 스프링 시큐리티는 인메모리 세션 저장소인 `SecurityContextHolder`에 `UserDetails`정보를 저장한다.  
 클라이언트에게 세션ID와 함께 응답을 한다.
@@ -228,10 +228,10 @@ BCrypt알고리즘으로 암호화된 암호문은 위와 같은 형태를 가�
 * Salt : 랜덤하게 생성되는 값으로 매번 암호화 결과가 달라진다. 
 * Costfactor : 공격자가 해킹 시도 시 크래킹을 어렵고 시간 소모적으로 만든다. 
 
-위의 문자열의 경우 `$2b$`는 Bcrypt의 버전을 의미하고 현재 2b는 현재 표준 버전 중 하나라고 한다.  
+위의 문자열의 경우 `$2b$`는 Bcrypt의 버전을 의미하고 2b는 현재 표준 버전 중 하나라고 한다.  
 뒤의 `$12$`는 Cost Factor(작업 비용)를 나타낸다.  
 비용 인자는 해시를 계산하는데 걸리는 시간을 결정한다. 이 숫자는 2의 제곱으로 표현되며 위의 문자열의 경우 2의 12제곱을 의미한다. 비용인자가 높을수록 해시를 생성하는데 더 많은 시간이 걸리며 이는 해시를 역산하려는 공격을 더 어렵게, 시간 소모적으로 만든다. 이 경우 일반적으로 수 밀리초에서 몇 초 정도가 된다고 한다.  
-EXAMPLESALT는 해시화시 사용된 Salt값이다. `$EXAMPLESALTzUO1zZ1XpF.` 솔트는 고정된 길이의 랜덤 문자열로 입력 비밀버호와 결합되어 해시를 생성한다.
+EXAMPLESALT는 해시화시 사용된 Salt값이다. `$EXAMPLESALTzUO1zZ1XpF.` 솔트는 고정된 길이의 랜덤 문자열로 입력 비밀번호와 결합되어 해시를 생성한다.
 그 외의 문자열은 비밀번호의 해시 값이며 이는 비밀번호와 salt 그리고 작업 비용이 결합되어 생성된 고유의 해시 값이다.
 
 PasswordEncoder가 로그인 요청시 입력받은 비밀번호와 데이터베이스의 비밀번호가 일치하는지 확인하는 시나리오는 다음과 같다.
