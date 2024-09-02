@@ -4,7 +4,7 @@ title:  "JVM 웜업"
 author: 악어새62
 categories: [ TIL, WEB, Backend ]
 image: assets/images/3.jpg
-tags: [Java, Spring, Backend]
+tags: [ Java, Spring, Backend ]
 ---
 ## 개요
 
@@ -19,7 +19,7 @@ tags: [Java, Spring, Backend]
 .jar, .war와 같은 형식으로 여러 클래스 파일과 리소스 파일을 하나의 파일로 묶어준다. .jar파일은 메인 클래스 정보를 포함하고 있고(MANIFEST.MF 파일에 기록) `java -jar app.jar`와 같이 실행할 수 있다.
 war파일은 웹 어플리케이션을 배포할 때 사용되는 아카이브 형식으로 클래스 파일 뿐만 아니라 jsp, html, web.xml등을 포함한다.
 
-아무튼 이 파일을 실행하면 JVM은 이를 기계언어로 번역하여 CPU에서 처리하는 과정을 거친다.  
+아무튼 이 파일을 실행하면 JVM은 이를 기계어로 번역하여 CPU에서 처리하는 과정을 거친다.  
 이렇게 자바는 컴파일과 인터프리트 스텝을 거쳐서 실행되는 언어이다.
 
 그러다보니 바로 기계어로 변환되는 컴파일 언어에 비해 일반적으로 성능이 낮다.  
