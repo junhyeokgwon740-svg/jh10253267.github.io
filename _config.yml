@@ -143,7 +143,7 @@ defaults:
   home:
     heading: "성장하는 개발자"
     subheading: "반가워요~"
-    banner: "assets/images/banners/background_image.jpg"
+    banner: "https://github.com/user-attachments/assets/117e9d7d-67a0-4bcc-bf9a-3f601f63d0d8"
 
 timezone: Asia/Seoul
 
