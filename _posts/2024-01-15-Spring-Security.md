@@ -3,8 +3,12 @@ layout: post
 title:  "Spring Security"
 author: 악어새62
 categories: [ TIL, WEB, Backend ]
+excerpt_image: https://github.com/user-attachments/assets/4b65cca1-16df-4f3b-aa54-993384169f5b
 tags: [Spring, Security]
 ---
+
+![banner](https://github.com/user-attachments/assets/4b65cca1-16df-4f3b-aa54-993384169f5b)
+
 ## 개요
 
 사용자의 로그인과 세션 트래킹은 웹 애플리케이션에서 필수적인 기능이다.<br>
