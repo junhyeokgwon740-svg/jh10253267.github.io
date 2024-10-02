@@ -80,4 +80,8 @@ Statement사용을 지양하고 PreparedStatement를 사용해야하는 이유�
 3. Cache - 앞에서 본 캐시와 같다.
 4. Placeholder Replacement - Placeholder는 사용자가 입력한 데이터로 대치된다. 그리고 이 단계에서 쿼리는 이미 binding이 되어 컴파일된 상태이다. 그래서 유저가 입력한 정보는 하나의 단순한 문자열로 해석되며 바인딩된 쿼리의 의미를 변화시킬 수 없다. (이미 쿼리문은 정해졌다.)
 
+**이슈**  
+MySQL 8.0부터 Query Cache는 deprecated되었다.  
+여러가지 이유가 있는데 쿼리 캐시는 관리가 복잡하다. 예를 들어 데이터베이스에서 데이터가 변경되면 캐시된 결과도 무효화되어야하고 추가적인 메모리리를 사용한다는 점, Buffer Pool과 같은 대체 기술 등장 등등의 이유다.
+
 이런 이유로 PreparedStatement를 사용하면 SQL Injection으로부터 안전한 것이다.
