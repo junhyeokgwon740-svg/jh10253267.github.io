@@ -396,7 +396,7 @@ jwt토큰을 생성하고 검증하는 등의 로직은 직접 구현할 필요�
 이 클래스를 상속받아 토큰을 검증해주면 된다.  
 
 이러한 방식으로 인증을 수행할 때 스프링 시큐리티에서 사용하는 `SecurityContextHolder`와 관련된 기능들을 사용할 수 없다는 단점이 있다.  
-그래서 토큰 체크 필터에서 토큰을 체크하고 유효한 토큰이라면 인증 정보를 `SecurityContextHolder`에 저장하여 사용하도록 설정해줄 수 있다.
+그래서 필요하다면 토큰 체크 필터에서 토큰을 체크하고 유효한 토큰이라면 인증 정보를 `SecurityContextHolder`에 저장하여 사용하도록 설정해줄 수 있다.
 ```java
 SecurityContextHolder.getContext().setAuthentication(authentication);
 ```
