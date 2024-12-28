@@ -2,7 +2,7 @@
 layout: post
 title:  "Full Text Search"
 author: 악어새62
-categories: [ TIL, WEB, Backend ]
+categories: [TIL, WEB, Backend]
 image: assets/images/1.jpg
 tags: [MySql, Database]
 ---
@@ -22,9 +22,9 @@ SELECT * FROM post WHERE title LIKE '%test%'
 이렇게 하면 testPost, Potestst... 등등 제목에 test를 포함하고 있는 결과들이 출력된다.
 
 쿼리가 실행될 때 DB의 쿼리 옵티마이저가 판단해서 인덱스를 사용하는 것이 빠른 경우, 인덱스를 사용할 수 있는 경우 등등을 파악해서 쿼리를 실행시킨다.
-인덱스 테이블은 원래 값의 첫 글자부터 시작해서 정렬된다. 그러나 첫 글자가 무엇인지 알 수 없다면 인덱스를 사용할 수 없다.
+인덱스 테이블은 원래 값의 첫 글자부터 시작해서 정렬된다. 그러니 첫 글자가 무엇인지 알 수 없다면 인덱스를 사용할 수 없다.
 
-따라서 와일드 카드가 앞뒤로 붙은 경우 인덱스를 타지 않고 테이블을 풀 스캔한다.
+따라서 와일드 카드가 앞에 붙은 경우 인덱스를 타지 않고 테이블을 풀 스캔한다.
 
 ```sql
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
@@ -333,4 +333,4 @@ public class CustomFunctionContributor implements FunctionContributor {
 위와 같이 사용한다. registerPattern함수에 인자를 넣어 커스텀 펑션을 작성할 수 있다.  
 인자는 차례대로 사용할 함수 이름, 쿼리, 리턴 타입으로 함수의 이름은 자바에서 메소드의 이름을 정의하듯이 사용자 지정 이름이다.  
 쿼리는 `match (?1) against (?2 in boolean mode)`와 같이 작성하면 된다.  
-이 쿼리는 리턴 타입이 Double이다.
+Full Text 검색 쿼리는 리턴 타입이 Double(가중치)이다.
