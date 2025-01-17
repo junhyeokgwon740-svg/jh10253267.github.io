@@ -224,10 +224,12 @@ markdown: kramdown
 kramdown:
   input: GFM
 
+remote_theme: "jh10253267/jh10253267.github.io"
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-paginate
   - jekyll-spaceship
-remote_theme: "jh10253267/jh10253267.github.io"
+  - jekyll-remote-theme
