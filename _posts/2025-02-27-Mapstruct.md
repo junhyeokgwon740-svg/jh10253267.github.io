@@ -89,4 +89,9 @@ public class TestMapperImpl implements TestMapper {
 Test toTest(TestDTO testDTO, TestDTO2 testDTO2);
 ```
 
-
+일반적인 자바 프로그램이라면 이렇게 하면 되고 만약 스프링과 같은 프레임워크를 사용한다면 이를 주입받아서 사용하게된다.  
+그럴 땐 그런 이름의 빈을 찾을 수 없다는 에러가 발생한다. 이럴 땐 
+```java
+@Mapper(componentModel = "spring")
+```
+위와 같이 설정해서 빈으로 인식될 수 있도록 해야한다.
