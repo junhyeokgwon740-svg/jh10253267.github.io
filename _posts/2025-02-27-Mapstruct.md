@@ -39,7 +39,7 @@ annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 annotationProcessor란 컴파일 타임에 애노테이션을 분석하고 특정한 코드를 자동 생성하는 기능을 수행하는 도구로 주로 애노테이션 기반의 코드 생성 라이브러리에서 사용된다. 롬복도 보면...
 ```gradle
 compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+annotationProcessor 'org.projectlombok:lombok'
 ```
 이렇게 되어있다.  
 컴파일 시점에 실행되므로 성능이 뛰어나고 오류를 미리 감지할 수 있다.
