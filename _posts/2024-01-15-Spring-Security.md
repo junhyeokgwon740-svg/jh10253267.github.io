@@ -166,13 +166,16 @@ public SecurityFilterChain filterChain(HttpSecurity http) {
 정적 파일 css나 js와 같은 파일에도 필터가 적용되곤 한다. 
 이를 Config파일에서 설정해 줄 수 있다.
 다음과 같은 메소드를 추가해준다.
-**tmvmfld**
+
 ```java
 @Bean
 public WebSecurityCustomizer webSecurityCustomizer() {
   return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources(.atCommonLocations());
 }
 ```
+
+**스프링 시큐리티 6.x 버전을 기점으로 사용하지 않는 방식**  
+web.ignoring()은 FilterChain을 우회하여 정적 자원이라 하더라도  
 
 ## 인증과 인가
 
@@ -322,15 +325,38 @@ public PasswordEncoder passwordEncoder() {
 AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
 
-        authenticationManagerBuilder
-                .userDetailsService(apiUserDetailsService)
-                .passwordEncoder(passwordEncoder());
+authenticationManagerBuilder
+        .userDetailsService(apiUserDetailsService)
+        .passwordEncoder(passwordEncoder());
 
-        AuthenticationManager authenticationManager =
-                authenticationManagerBuilder.build();
+AuthenticationManager authenticationManager =
+        authenticationManagerBuilder.build();
 
-        http.authenticationManager(authenticationManager);
+http.authenticationManager(authenticationManager);
 ```
+**스프링 시큐리티 6.x 버전을 기점으로 변경되었다.**
+1. `getSharedObject(AuthenticationManagerBuilder.class)` 방식이 내부 구조상 불안정하다.
+2. `AuthenticationManagerBuilder`에 직접 접근보단 빈으로 등록하는 것이 더 안전함.
+3. 시큐리티 코드 방식이 람다 형식으로 변경되었다.
+
+변경된 방식
+```java
+@Bean
+public AuthenticationManager authenticationManager(UserDetailsService userDetailsService,
+                                                    PasswordEncoder passwordEncoder) {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    authProvider.setUserDetailsService(userDetailsService);
+    authProvider.setPasswordEncoder(passwordEncoder);
+
+    return new ProviderManager(authProvider);
+}
+...
+AuthenticationManager authenticationManager =
+                authenticationManager(apiUserDetailsService, passwordEncoder());
+
+http.authenticationManager(authenticationManager);
+```
+
 그리고 LoginFilter를 만들어준다.  
 위에서 말한대로 `AbstractAuthenticationProcessingFilter`를 상속받아 구현한다.
 
